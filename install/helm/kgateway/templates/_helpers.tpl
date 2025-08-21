@@ -36,10 +36,15 @@ Common labels
 {{- define "kgateway.labels" -}}
 helm.sh/chart: {{ include "kgateway.chart" . }}
 {{ include "kgateway.selectorLabels" . }}
+app.kubernetes.io/component: gateway
+app.kubernetes.io/part-of: kgateway
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- if .Values.additionalLabels }}
+{{ toYaml $.Values.additionalLabels $ }}
+{{- end }}
 {{- end }}
 
 {{/*

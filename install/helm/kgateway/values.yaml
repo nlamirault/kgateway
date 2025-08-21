@@ -16,6 +16,10 @@ serviceAccount:
   # -- Set the name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   name: ""
 
+# Additional labels to add to all resources.
+additionalLabels: {}
+#  k8s-app: my-app
+
 # -- Add annotations to the kgateway deployment.
 deploymentAnnotations: {}
 
