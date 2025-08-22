@@ -1,0 +1,35 @@
+{{- if .Values.serviceMonitor.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "kgateway.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kgateway.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.additionalLabels }}
+    {{ toYaml . }}
+    {{- end }}
+spec:
+  jobLabel: {{ template "kgateway.fullname" . }}
+  endpoints:
+    - port: metrics
+      interval: {{ .Values.serviceMonitor.interval }}
+      {{- if .Values.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+  selector:
+    matchLabels:
+      {{- include "kgateway.selectorLabels" . | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  {{- with .Values.serviceMonitor.relabelings }}
+  relabelings:
+  {{- toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with .Values.serviceMonitor.metricRelabelings }}
+  metricRelabelings:
+  {{- toYaml . | nindent 6 }}
+  {{- end }}
+{{- end -}}

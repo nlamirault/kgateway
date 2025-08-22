@@ -12,5 +12,9 @@ spec:
     protocol: TCP
     port: {{ .Values.controller.service.ports.grpc }}
     targetPort: {{ .Values.controller.service.ports.grpc }}
+  - name: metrics
+    protocol: TCP
+    port: {{ .Values.controller.service.ports.metrics }}
+    targetPort: {{ .Values.controller.service.ports.metrics }}
   selector:
     {{- include "kgateway.selectorLabels" . | nindent 4 }}
